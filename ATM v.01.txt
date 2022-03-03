@@ -1,0 +1,124 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <locale.h>
+#include <string.h>
+#define Qtd_clintes 3 // quantidade de clientes que posso ter no programa
+
+typedef struct
+{
+    char nome[50];
+    int numcliente;
+    int cartao;
+    int codigo[4];
+    int dinhero;
+} INFO;
+
+void fullcliente(INFO cliente[Qtd_clintes]){ // criar clientes ATM
+
+for(int voltas = 0 ; voltas < Qtd_clintes; voltas++ ){
+
+    char nome[50],resposta;
+    int num=0,cartao=123000;
+
+    printf("Insira um nome do cliente nº%i: ",(voltas+1));
+    gets(cliente[voltas].nome);
+    // meter letras em caps lock
+        for(int nomevoltas = 0 ; nomevoltas < 50 ; nomevoltas++){
+        cliente[voltas].nome[nomevoltas] = toupper(cliente[voltas].nome[nomevoltas]);
+        }
+    //Dar numeros ao cliente e ao cartão
+    cliente[voltas].numcliente = 1+voltas;
+    cliente[voltas].cartao = 123000+voltas;
+
+    //Criar um pin para cada cartão de 1 a 9 em cada digito
+        codigo:
+            printf("\nInsira um codigo s/zeros com 4 digitos(xxxx):\n");
+            for(int x = 0 ; x < 4 ; x++){
+                tentedenovo:
+                printf("\nInsira o %iº digito: ",x+1);
+                scanf("%i",&cliente[voltas].codigo[x]);
+                if(cliente[voltas].codigo[x] == 0 || cliente[voltas].codigo[x] > 9 && cliente[voltas].codigo[x] < 1){
+                    printf("\nHá alguma coisa errada no pin tente denovo\n");
+                    goto tentedenovo;
+                    }
+                }
+                printf("\nO codigo escrito foi: "); for(int x = 0 ; x < 4 ; x++){   printf("%i",cliente[voltas].codigo[x]);     }
+                printf("\n\nÉ este o codigo que queres? \n'1'= Sim \n'2'= Não, quero outro \n Resposta:");
+                scanf("%i",&resposta);
+                    if(resposta != 2)
+                    printf("O seu codigo foi criado com sucesso\n***********************************\n");
+                    else{goto codigo;};
+    cliente[voltas].dinhero = 1000;
+    fflush(stdin);
+    }
+}
+
+void verclientes(INFO cliente[Qtd_clintes]){ // ver clientes criado
+    for(int voltas = 0 ; voltas < Qtd_clintes; voltas++ ){
+        printf("Nome: %s \n",cliente[voltas].nome);
+        printf("\nNº de cliente: %i \n",cliente[voltas].numcliente);
+        printf("Nº do cartão: %i\n",cliente[voltas].cartao);
+        printf("***********************************\n");
+    }
+}
+
+void escolhercliente(INFO cliente[Qtd_clintes]){// escolher um dos cliente para seguir
+
+int numcliente,validarpin[4],tentativas=3;
+    inicio:
+    tentativas=3;
+    printf("\n\nDespois de ver os clientes disponiveis insira o 'Nº de cliente' que quer controlar: ");
+    scanf("%i",&numcliente);
+    if( numcliente > Qtd_clintes ){
+        goto inicio;}
+    numcliente = numcliente - 1;
+    // ver o pin do cliente
+    //  printf("\n\npin: ");    for(int x = 0 ; x < 4 ; x++){printf("%i",cliente[numcliente].codigo[x]);}
+
+            printf("\n\n\n\t***********************************\n");
+            printf("\tNome: %s \n",cliente[numcliente].nome);
+            printf("\t\n\tNº de cliente: %i \n",cliente[numcliente].numcliente);
+            printf("\tNº do cartão: %i\n",cliente[numcliente].cartao);
+            printf("\t***********************************\n");
+            printf("\n***********************************\nAutenticação do cliente escolhido\n***********************************\n");
+
+//ver se o pin bate certo
+Autenticacao:
+    printf("Insira o codigo do cliente escolhido: \n");
+
+for(int x = 0 ; x < 4 ; x++){
+    printf("Insira o %iº digito é: ",(x+1));
+    scanf("%i",&validarpin[x]);
+    if(validarpin[x] != cliente[numcliente].codigo[x]){
+        printf("PIN Errado! tem %i tentativas",(tentativas-1));
+        tentativas--;
+        if(tentativas==0){goto inicio;}
+            else goto Autenticacao;
+        }
+    }
+fflush(stdin);
+}
+
+
+
+//
+//
+//
+//
+//
+//
+//
+
+int main()
+{
+    setlocale(LC_ALL, "Portuguese");
+    INFO cliente[Qtd_clintes]; // declarar a variavel clientes com vetor[3]
+    fullcliente(cliente);
+    sleep(1);
+    verclientes(cliente);
+    sleep(1);
+    escolhercliente(cliente);
+    sleep(1);
+    printf("FIM\n");
+    return 0;
+}

@@ -1,0 +1,62 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <locale.h>
+#include <string.h>
+#define Qtd_clintes 3
+
+typedef struct
+{
+    char nome[50];
+    int numcliente;
+    int cartao;
+    int codigo;
+    int dinhero;
+} INFO;
+
+// criar clientes ATM
+void fullcliente(INFO cliente[Qtd_clintes]){
+
+for(int voltas = 0 ; voltas < Qtd_clintes; voltas++ ){
+    char nome[50];int resposta,num=0,cartao=123000;
+    printf("Insira um nome do cliente nº%i: ",(voltas+1));
+    gets(cliente[voltas].nome);
+
+    cliente[voltas].numcliente = 1+voltas;
+    cliente[voltas].cartao = 123000+voltas;
+
+        codigo:
+            printf("\nInsira um codigo com 4 digitos\n");
+            for(int voltadocodigo = 0 ; voltadocodigo < 4 ; voltadocodigo++){
+            printf("%iº DIGITO: ",voltadocodigo+1);
+            scanf("%i",&cliente[voltadocodigo].codigo);
+            }
+                printf("\nO codigo escrito foi:");
+                for(int voltadocodigo = 0 ; voltadocodigo < 4 ; voltadocodigo++){printf("%i",cliente[voltadocodigo].codigo);}
+                printf("\n\nÉ este o codigo que queres? \n'1'= Sim \n'2'= Não, quero outro \n Resposta:");
+                scanf("%i",&resposta);
+                if(resposta != 2)
+                    printf("O seu codigo foi criado com sucesso\n");
+
+                else{goto codigo;};
+
+    cliente[voltas].dinhero = 1000;
+    fflush(stdin);
+    }
+}
+
+
+int main()
+{
+    setlocale(LC_ALL, "Portuguese");
+
+     INFO cliente[Qtd_clintes];
+     fullcliente(cliente);
+/*
+cliente[0]{"LUCAS OLIVEIRA",0,123000,1234,1000};
+cliente[1]{"ELON MUSK",1,123001,1234,1000};
+cliente[2]{"JORDAN B PETERSON",2,123002,1234,1000};
+cliente[3]{"JOE ROGAN",3,123003,1234,1000};
+*/
+    printf("Hello world!\n");
+    return 0;
+}
